@@ -1,5 +1,4 @@
 import os
-import datetime.datetime as dt
 
 from flask import current_app
 from sqlalchemy import create_engine
@@ -29,10 +28,6 @@ Base = declarative_base()
 Base.query = db_session.query_property()
 
 
-d_format = "%Y-%m-%d"
-dt_format = "%Y-%m-%dT%H:%M:%S.%fZ"
-
-
 class Model(Base):
     __abstract__ = True
 
@@ -54,19 +49,3 @@ class Model(Base):
     def delete(self):
         db_session.delete(self)
         db_session.commit()
-
-    def to_dict(self, excludes=[], use_date=[]):
-        data = {}
-        for column in self.__table__.columns:
-            if column.name in excludes:
-                continue
-
-            value = getattr(self, column.name)
-            if isinstance(value, dt):
-                if column.name in use_date:
-                    value = str(dt.strftime(value, d_format))
-                else:
-                    value = str(dt.strftime(value, dt_format))
-
-            data.update({column.name: value})
-        return data

@@ -1,26 +1,14 @@
 from functools import wraps
 
 
-def list_jsonify(excludes=[], use_date=[]):
-    """Decorator for transform sqlalchemy query results as json
+def print_exception(exception: Exception):
+    """Decorate functions that will raise the targeted exception 
+    and catch its error, print its error message
 
-    :param excludes: see in the database.Model.to_dict, defaults to []
-    :type excludes: list, optional
-    :param use_date: see in the database.Model.to_dict, defaults to []
-    :type use_date: list, optional
+    :param exception: The targeted exception that you want to track
+    :type exception: Exception
     """
 
-    def decorator(fn):
-        @wraps(fn)
-        def wrap(*args, **kwargs):
-            as_list = [data.to_dict(excludes, use_date)
-                       for data in fn(*args, **kwargs)]
-            return {"list": as_list}
-        return wrap
-    return decorator
-
-
-def print_exception(exception: Exception):
     def decorator(fn):
         @wraps(fn)
         def wrap(*args, **kwargs):

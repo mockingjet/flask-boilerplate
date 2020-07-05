@@ -4,6 +4,7 @@ from . import commands
 from .modules import articles
 from .settings import DevConfig
 from .database import db_session
+from .exceptions import APIError
 
 
 def create_app(config=DevConfig):
@@ -14,6 +15,10 @@ def create_app(config=DevConfig):
     register_bps(app)
     register_cmds(app)
 
+    @app.errorhandler(APIError)
+    def render_dict(error):
+        return error.response
+
     @app.teardown_appcontext
     def shutdown_session(exception=None):
         db_session.remove()
@@ -22,7 +27,7 @@ def create_app(config=DevConfig):
 
 
 def register_bps(app: Flask):
-    app.register_blueprint(articles.views.bp, url_prefix="/api/v1")
+    app.register_blueprint(articles.views.bp, url_prefix="/api/v0")
 
 
 def register_cmds(app: Flask):

@@ -1,10 +1,6 @@
-from sqlalchemy.exc import IntegrityError
-
-from .utils import print_exception
 from .modules.articles.models import Article, Category, Tag
 
 
-@print_exception(IntegrityError)
 def create_articles():
     c1 = Category('f2e').save()
     c2 = Category('devops') .save()
@@ -22,4 +18,3 @@ def create_articles():
                  body="...")
     a2.tags.append(t2)
     a2.save()
-    print("creating articles --- done")

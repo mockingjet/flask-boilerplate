@@ -5,9 +5,11 @@ import click
 import alembic.config
 from jinja2 import Template
 from flask.cli import AppGroup, with_appcontext
+from sqlalchemy.exc import IntegrityError
 
 from . import seeds
 from .database import engine, Model
+from .utils import print_exception
 
 db = AppGroup('db')
 seed = AppGroup('seed')
@@ -40,8 +42,10 @@ def db_merge():
 
 @seed.command('articles')
 @with_appcontext
+@print_exception(IntegrityError)
 def seed_articles():
     seeds.create_articles()
+    print("creating articles --- done")
 
 
 @make.command('module')
