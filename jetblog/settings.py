@@ -25,6 +25,7 @@ class TestConfig(Config):
     ENV = 'test'
     DEBUG = True
     TESTING = True
+    DATABASE_URI = getenv('TEST_DATABASE_URI', 'sqlite:///test.db')
 
 
 class ProdConfig(Config):

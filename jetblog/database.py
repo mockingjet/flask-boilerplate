@@ -1,7 +1,6 @@
 import os
 import abc
 
-from flask import current_app
 from sqlalchemy import create_engine
 from sqlalchemy.pool import QueuePool
 from sqlalchemy.orm import sessionmaker, scoped_session
@@ -18,12 +17,7 @@ engine = create_engine(
     max_overflow=1,
     connect_args={"check_same_thread": False})
 
-session = sessionmaker(
-    autocommit=False,
-    autoflush=False,
-    bind=engine)
-
-db_session = scoped_session(session)
+db_session = scoped_session(sessionmaker(bind=engine))
 
 Base = declarative_base()
 Base.query = db_session.query_property()

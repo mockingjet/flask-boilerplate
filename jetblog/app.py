@@ -1,13 +1,13 @@
 from flask import Flask
 
 from . import commands
-from .modules import articles
+from .modules import article
 from .settings import DevConfig
 from .database import db_session
 from .exceptions import APIError
 
 
-def create_app(config=DevConfig):
+def create_app(config=DevConfig) -> Flask:
     app = Flask(__name__)
     app.config.from_object(config)
     app.url_map.strict_slashes = False
@@ -27,10 +27,11 @@ def create_app(config=DevConfig):
 
 
 def register_bps(app: Flask):
-    app.register_blueprint(articles.views.bp, url_prefix="/api/v0")
+    app.register_blueprint(article.views.bp, url_prefix="/api/v0")
 
 
 def register_cmds(app: Flask):
+    app.cli.add_command(commands.test)
     app.cli.add_command(commands.db)
     app.cli.add_command(commands.seed)
     app.cli.add_command(commands.make)

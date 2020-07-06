@@ -1,3 +1,4 @@
+import re
 import os
 import click
 
@@ -8,12 +9,24 @@ from flask.cli import AppGroup, with_appcontext
 from sqlalchemy.exc import IntegrityError
 
 from . import seeds
-from .database import engine, Model
 from .utils import print_exception
 
 db = AppGroup('db')
 seed = AppGroup('seed')
 make = AppGroup('make')
+
+HERE = os.path.abspath(os.path.dirname(__file__))
+PROJECT_NAME = os.path.basename(HERE)
+PROJECT_ROOT = os.path.join(HERE, os.pardir)
+TEST_PATH = os.path.join(PROJECT_ROOT, 'tests')
+
+
+@click.command()
+def test():
+    """ run pytest """
+    import pytest
+    rv = pytest.main([TEST_PATH, '-v', '-s'])
+    exit(rv)
 
 
 @db.command('reset')
@@ -54,7 +67,7 @@ def seed_articles():
 
 
 @make.command('module')
-@click.option('--app', help="The application name, default=root dirname", default=os.path.relpath('.', '..'))
+@click.option('--app', help="The application name, default=root dirname", default=PROJECT_NAME)
 @click.option('-mod', '--module', prompt=True, help="The module name and table name")
 @click.option('-m', '--model', prompt=True, help="The model name and table id name (+'_id')")
 def make_module(app, module, model):

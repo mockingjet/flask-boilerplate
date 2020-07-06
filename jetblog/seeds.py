@@ -1,4 +1,4 @@
-from .modules.articles.models import Article, Category, Tag
+from jetblog.modules.article.models import Article, Category, Tag
 
 
 def create_articles():
