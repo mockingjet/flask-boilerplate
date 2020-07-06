@@ -51,7 +51,7 @@ def seed_articles():
 @make.command('module')
 @click.option('--app', help="The application name, default=root dirname", default=os.path.relpath('.', '..'))
 @click.option('-mod', '--module', prompt=True, help="The module name and table name")
-@click.option('-m', '--model', prompt=True, help="The model name and table id name (+'Id')")
+@click.option('-m', '--model', prompt=True, help="The model name and table id name (+'_id')")
 def make_module(app, module, model):
     dirname = os.path.join(app, 'modules', module)
     try:
@@ -76,7 +76,7 @@ def make_module(app, module, model):
     models_path = os.path.join(dirname, 'models.py')
     with open(models_path, 'w') as file:
         output = template.render(
-            app=app, model=model, table=module, id=model.lower() + 'Id')
+            app=app, model=model, table=module, id=model.lower() + '_id')
         file.write(output)
 
     # make views.py

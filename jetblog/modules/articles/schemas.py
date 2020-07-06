@@ -9,7 +9,7 @@ from .models import Category, Tag, Article
 class CategorySchema(SQLAlchemyAutoSchema):
     class Meta:
         model = Category
-        exclude = ['createdAt']
+        exclude = ['created_at']
 
     tags = fields.Nested(lambda: TagSchema(exclude=['category']), many=True)
 
@@ -18,7 +18,7 @@ class TagSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = Tag
         include_fk = True
-        exclude = ['createdAt', 'categoryId']
+        exclude = ['created_at', 'category_id']
 
     category = fields.Nested(CategorySchema(exclude=['tags']))
 
