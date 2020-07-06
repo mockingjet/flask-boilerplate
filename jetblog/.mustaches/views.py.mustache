@@ -7,7 +7,7 @@ bp = Blueprint('{{module}}', __name__)
 
 
 @bp.route('/{{module}}', methods=['GET'])
-@list_jsonify(use_date=["created_at"])
+@list_jsonify(use_date=["createdAt"])
 def get_{{module}}():
     {{module}} = {{model}}.query.all()
     return {{module}}

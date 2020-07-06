@@ -7,16 +7,16 @@ from jetblog.database import Model
 
 articles_assoc_tags = Table(
     "articles_assoc_tags", Model.metadata,
-    Column("tag_id", Integer, ForeignKey('tags.tag_id')),
-    Column("article_id", Integer, ForeignKey('articles.article_id')))
+    Column("tagId", Integer, ForeignKey('tags.tagId')),
+    Column("articleId", Integer, ForeignKey('articles.articleId')))
 
 
 class Category(Model):
     __tablename__ = 'categories'
 
-    category_id = Column(Integer, primary_key=True)
+    categoryId = Column(Integer, primary_key=True)
     name = Column(String(30), unique=True, index=True)
-    created_at = Column(DateTime, default=dt.datetime.utcnow)
+    createdAt = Column(DateTime, default=dt.datetime.utcnow)
 
     tags = relationship("Tag")
 
@@ -27,10 +27,10 @@ class Category(Model):
 class Tag(Model):
     __tablename__ = "tags"
 
-    tag_id = Column(Integer, primary_key=True)
+    tagId = Column(Integer, primary_key=True)
     name = Column(String(30), unique=True, index=True)
-    category_id = Column(Integer, ForeignKey('categories.category_id'))
-    created_at = Column(DateTime, default=dt.datetime.utcnow)
+    categoryId = Column(Integer, ForeignKey('categories.categoryId'))
+    createdAt = Column(DateTime, default=dt.datetime.utcnow)
 
     category = relationship("Category")
     articles = relationship("Article", secondary=articles_assoc_tags,
@@ -43,15 +43,16 @@ class Tag(Model):
 class Article(Model):
     __tablename__ = "articles"
 
-    article_id = Column(Integer, primary_key=True)
+    articleId = Column(Integer, primary_key=True)
     title = Column(String(30), unique=True, index=True)
     description = Column(String(120))
     body = Column(TEXT)
-    created_at = Column(DateTime, default=dt.datetime.utcnow)
+    createdAt = Column(DateTime, default=dt.datetime.utcnow)
 
     tags = relationship("Tag", secondary=articles_assoc_tags,
                         back_populates="articles")
 
-    def __init__(self, title, description, body, **kwargs):
+    def __init__(self, title, description, body, extended_tags=[], **kwargs):
         Model.__init__(self, title=title,
                        description=description, body=body, **kwargs)
+        self.tags.extend(extended_tags)
