@@ -9,7 +9,8 @@ class CategorySchema(Schema):
     category_id = fields.Int()
     name = fields.Str()
 
-    tags = fields.Nested(lambda: TagSchema(exclude=['category']), many=True)
+    # tags = fields.Nested(lambda: TagSchema(exclude=['category']), many=True)
+    tags = fields.Nested('TagSchema', exclude=['category'], many=True)
 
 
 class TagSchema(Schema):
@@ -17,7 +18,7 @@ class TagSchema(Schema):
     name = fields.Str()
     category_id = fields.Int()
 
-    category = fields.Nested(lambda: CategorySchema(exclude=['tags']))
+    category = fields.Nested(CategorySchema(exclude=['tags']))
 
 
 class ArticleSchema(Schema):
@@ -27,7 +28,7 @@ class ArticleSchema(Schema):
     body = fields.Str()
     created_at = fields.DateTime()
 
-    tags = fields.Nested(lambda: TagSchema(exclude=['category_id']), many=True)
+    tags = fields.Nested(TagSchema(exclude=['category_id']), many=True)
 
     @post_dump(pass_many=True)
     def envelope(self, data, many, **kwargs):

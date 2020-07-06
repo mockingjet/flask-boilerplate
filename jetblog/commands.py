@@ -68,7 +68,7 @@ def make_module(app, module, model):
 
     # make models.py
     models_template_path = os.path.join(
-        app, '__mustaches__', 'models.py.mustache')
+        app, '.mustaches', 'models.py.mustache')
     with open(models_template_path) as file:
         template = Template(file.read())
 
@@ -81,7 +81,7 @@ def make_module(app, module, model):
 
     # make views.py
     views_template_path = os.path.join(
-        app, '__mustaches__', 'views.py.mustache')
+        app, '.mustaches', 'views.py.mustache')
     with open(views_template_path) as file:
         template = Template(file.read())
 
