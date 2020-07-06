@@ -5,8 +5,8 @@ def create_articles():
     c1 = Category('f2e').save()
     c2 = Category('devops') .save()
 
-    t1 = Tag('js', c1.category_id) .save()
-    t2 = Tag('docker', c2.category_id) .save()
+    t1 = Tag('js', c1) .save()
+    t2 = Tag('docker', c2) .save()
 
     a1 = Article(title="advanced javascript",
                  description="the best way to improve your js skills",

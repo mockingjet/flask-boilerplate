@@ -35,6 +35,11 @@ def db_upgrade():
     alembic.config.main(argv=['upgrade', 'head'])
 
 
+@db.command('downgrade')
+def db_upgrade():
+    alembic.config.main(argv=['downgrade', '-1'])
+
+
 @db.command('merge')
 def db_merge():
     alembic.config.main(argv=['merge'])

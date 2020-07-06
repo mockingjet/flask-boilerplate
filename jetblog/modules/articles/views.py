@@ -10,7 +10,7 @@ bp = Blueprint('articles', __name__)
 
 @bp.route('/articles')
 def get_articles():
-    articles_schema = ArticleSchema(many=True, exclude=['tags.category'])
+    articles_schema = ArticleSchema(many=True)
     articles = Article.query.all()
     return {
         "apiVerison": "1.0",
@@ -20,7 +20,7 @@ def get_articles():
 
 @bp.route('/articles/<int:_id>')
 def get_article(_id):
-    article_schema = ArticleSchema(exclude=['tags.category'])
+    article_schema = ArticleSchema()
     article = Article.query.get(_id)
     if not article:
         raise APIError(400, "article not found")
