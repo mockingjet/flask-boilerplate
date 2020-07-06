@@ -4,7 +4,7 @@ sys.dont_write_bytecode = True
 import pytest
 
 from jetblog.app import create_app
-from jetblog.settings import Config, TestConfig
+from jetblog.settings import TestConfig
 from jetblog.database import Base, engine
 
 

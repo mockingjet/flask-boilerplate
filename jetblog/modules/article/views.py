@@ -1,7 +1,6 @@
 from flask import Blueprint, request
 from marshmallow import ValidationError
 
-from jetblog.utils import wrap_response
 from jetblog.exceptions import APIError
 from .models import Article, Tag, Category
 from .schemas import ArticleSchema, TagSchema, CategorySchema

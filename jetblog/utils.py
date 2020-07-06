@@ -18,14 +18,3 @@ def print_exception(targeted_exception: Exception):
                 print(str(e))
         return wrap
     return decorator
-
-
-def wrap_response(fn):
-    @wraps(fn)
-    def wrap(*args, **kwargs):
-        apiVersion, data = fn(*args, **kwargs)
-        return {
-            "apiVerison": apiVersion,
-            "data": data
-        }
-    return wrap

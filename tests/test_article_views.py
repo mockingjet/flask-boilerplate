@@ -2,6 +2,7 @@ import pytest
 from flask import url_for
 
 
+# @pytest.mark.skip
 class TestArticleViews:
 
     def test_post_articles(self, client):

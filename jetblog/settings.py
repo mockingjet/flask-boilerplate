@@ -8,7 +8,7 @@ class Config(object):
     """Base configuration."""
 
     SECRET = getenv('SECRET', 'secret')
-    DATABASE_URI = getenv('DATABASE_URI', 'sqlite:///dev.db')
+    DATABASE_URI = getenv('DATABASE_URI', 'sqlite://')
 
 
 class DevConfig(Config):
@@ -25,7 +25,6 @@ class TestConfig(Config):
     ENV = 'test'
     DEBUG = True
     TESTING = True
-    DATABASE_URI = getenv('TEST_DATABASE_URI', 'sqlite:///test.db')
 
 
 class ProdConfig(Config):
