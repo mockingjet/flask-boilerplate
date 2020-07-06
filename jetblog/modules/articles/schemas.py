@@ -1,36 +1,30 @@
 import datetime as dt
 
 from marshmallow import Schema, fields, post_dump
+from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 
-from .models import Article
-
-
-class CategorySchema(Schema):
-    category_id = fields.Int()
-    name = fields.Str()
-
-    # tags = fields.Nested(lambda: TagSchema(exclude=['category']), many=True)
-    tags = fields.Nested('TagSchema', exclude=['category'], many=True)
+from .models import Category, Tag, Article
 
 
-class TagSchema(Schema):
-    tag_id = fields.Str()
-    name = fields.Str()
-    category_id = fields.Int()
+class CategorySchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = Category
+        exclude = ['created_at']
+
+    tags = fields.Nested(lambda: TagSchema(exclude=['category']), many=True)
+
+
+class TagSchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = Tag
+        include_fk = True
+        exclude = ['created_at', 'category_id']
 
     category = fields.Nested(CategorySchema(exclude=['tags']))
 
 
-class ArticleSchema(Schema):
-    article_id = fields.Int()
-    title = fields.Str()
-    description = fields.Str()
-    body = fields.Str()
-    created_at = fields.DateTime()
+class ArticleSchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = Article
 
-    tags = fields.Nested(TagSchema(exclude=['category_id']), many=True)
-
-    @post_dump(pass_many=True)
-    def envelope(self, data, many, **kwargs):
-        key = "articles" if many else "article"
-        return {key: data}
+    tags = fields.Nested(TagSchema, many=True)
