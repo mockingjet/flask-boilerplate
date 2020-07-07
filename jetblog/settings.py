@@ -3,13 +3,14 @@ from datetime import timedelta
 
 getenv = os.environ.get
 
+DEFAULT_DBURI = 'postgresql+psycopg2://postgres:ciPs1618@192.168.66.65:5432/petertsai'
+
 
 class Config(object):
     """Base configuration."""
 
     SECRET = getenv('SECRET', 'secret')
-    DATABASE_URI = getenv(
-        'DATABASE_URI', 'postgresql+psycopg2://postgres:ciPs1618@192.168.66.65:5432/test')
+    DATABASE_URI = getenv('DATABASE_URI', DEFAULT_DBURI)
 
 
 class DevConfig(Config):

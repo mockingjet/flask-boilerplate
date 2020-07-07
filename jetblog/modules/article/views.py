@@ -69,6 +69,33 @@ def get_article_by_title(_title):
     }
 
 
+@bp.route('/article/<int:_id>', methods=['PUT'])
+def put_article(_id):
+    article = Article.query.get(_id)
+    if not article:
+        raise APIError(400, "article not found")
+
+    json_data = request.get_json()
+    article_schema = ArticleSchema(exclude=['tags.category'])
+
+    try:
+        data = article_schema.load(json_data)
+    except ValidationError as verr:
+        raise APIError(422, "invalid input", input_error=verr.messages)
+
+    try:
+        article.update(**data)
+    except Exception as e:
+        raise APIError()
+
+    return {
+        "apiVersion": "0.0",
+        "data": {
+            "article": article_schema.dump(article)
+        }
+    }
+
+
 @bp.route('/tags')
 def get_tags():
     tags = Tag.query.all()

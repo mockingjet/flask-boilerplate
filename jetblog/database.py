@@ -2,7 +2,6 @@ import os
 import abc
 
 from sqlalchemy import create_engine
-from sqlalchemy.pool import QueuePool
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -12,12 +11,14 @@ from .settings import Config
 engine = create_engine(
     Config.DATABASE_URI,
     pool_size=2,
+    max_overflow=1,
     pool_timeout=2,
-    poolclass=QueuePool,
-    max_overflow=1)
+    pool_recycle=3600,
+    pool_pre_ping=True)
 
+# singleton
 db_session = scoped_session(sessionmaker(engine))
-
+# sa basic model
 Base = declarative_base()
 
 

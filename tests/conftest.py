@@ -8,12 +8,11 @@ from jetblog.settings import TestConfig
 from jetblog.database import engine, db_session, Base
 
 
-@pytest.fixture(scope="class")
+@pytest.fixture(scope="session")
 def app():
     app = create_app(TestConfig)
     ctx = app.test_request_context()
     ctx.push()
-
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
 
@@ -24,6 +23,6 @@ def app():
     ctx.pop()
 
 
-@pytest.fixture(scope="class")
+@pytest.fixture()
 def client(app):
     return app.test_client()
