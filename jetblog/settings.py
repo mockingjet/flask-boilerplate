@@ -8,7 +8,8 @@ class Config(object):
     """Base configuration."""
 
     SECRET = getenv('SECRET', 'secret')
-    DATABASE_URI = getenv('DATABASE_URI', 'sqlite://')
+    DATABASE_URI = getenv(
+        'DATABASE_URI', 'postgresql+psycopg2://postgres:ciPs1618@192.168.66.65:5432/test')
 
 
 class DevConfig(Config):

@@ -14,17 +14,16 @@ engine = create_engine(
     pool_size=2,
     pool_timeout=2,
     poolclass=QueuePool,
-    max_overflow=1,
-    connect_args={"check_same_thread": False})
+    max_overflow=1)
 
-db_session = scoped_session(sessionmaker(bind=engine))
+db_session = scoped_session(sessionmaker(engine))
 
 Base = declarative_base()
-Base.query = db_session.query_property()
 
 
 class Model(Base):
     __abstract__ = True
+    query = db_session.query_property()
 
     @classmethod
     def create(cls, **kwargs):

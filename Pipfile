@@ -13,6 +13,7 @@ flask = "*"
 sqlalchemy = "*"
 marshmallow = "*"
 marshmallow-sqlalchemy = "*"
+psycopg2 = "*"
 
 [requires]
 python_version = "3.7"
