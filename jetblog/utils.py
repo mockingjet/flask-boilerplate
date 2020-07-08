@@ -18,3 +18,22 @@ def print_exception(targeted_exception: Exception):
                 print(str(e))
         return wrap
     return decorator
+
+
+def wrap_response(api_version=0.0):
+    """Wrap API response with API version and evelope data
+
+    :param api_version: the api version, defaults to 0.0
+    :type api_version: float, optional
+    """
+
+    def decorator(fn):
+        @wraps(fn)
+        def wrap(*args, **kwargs):
+            resp = fn(*args, **kwargs)
+            return {
+                "apiVersion": api_version,
+                "data": resp
+            }
+        return wrap
+    return decorator

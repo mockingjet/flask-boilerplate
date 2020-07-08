@@ -53,8 +53,8 @@ def camelcase(s):
 
 
 class SaAutoCamelSchema(SQLAlchemyAutoSchema):
-    """For marshmallow schemas that uses camel-case for its external representation
-    and snake-case for its internal representation.
+    """For marshmallow schemas that use camelCase for its external representation
+    and snake_case for its internal representation.
     """
 
     def on_bind_field(self, field_name, field_obj):

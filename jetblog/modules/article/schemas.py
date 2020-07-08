@@ -11,6 +11,7 @@ class CategorySchema(SaAutoCamelSchema):
         model = Category
         exclude = ['created_at']
 
+    name = fields.Str(required=True)
     tags = fields.Nested(lambda: TagSchema(exclude=['category']), many=True)
 
 
@@ -20,6 +21,7 @@ class TagSchema(SaAutoCamelSchema):
         include_fk = True
         exclude = ['created_at', 'category_id']
 
+    name = fields.Str(required=True)
     category = fields.Nested(CategorySchema(exclude=['tags']))
 
 

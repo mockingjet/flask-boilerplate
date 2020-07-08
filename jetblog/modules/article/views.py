@@ -1,6 +1,7 @@
 from flask import Blueprint, request
 from marshmallow import ValidationError
 
+from jetblog.utils import wrap_response
 from jetblog.exceptions import APIError
 from .models import Article, Tag, Category
 from .schemas import ArticleSchema, TagSchema, CategorySchema
@@ -10,70 +11,61 @@ bp = Blueprint('article', __name__)
 
 
 @bp.route('/articles')
+@wrap_response()
 def get_articles():
     articles = Article.query.all()
     articles_schema = ArticleSchema(many=True)
-    return {
-        "apiVerison": "0.0",
-        "data": {
-            "articles": articles_schema.dump(articles)
-        }
-    }
+
+    return {"articles": articles_schema.dump(articles)}
 
 
 @bp.route('/articles', methods=['POST'])
+@wrap_response()
 def post_articles():
     json_data = request.get_json()
     article_schema = ArticleSchema()
+
     try:
         data = article_schema.load(json_data)
     except ValidationError as verr:
-        raise APIError(422, "invalid input", input_error=verr.messages)
+        raise APIError(400, "invalid input", input_error=verr.messages)
 
-    article = Article.create(**data)
-    return {
-        "apiVerison": "0.0",
-        "data": {
-            "article": article_schema.dump(article)
-        }
-    }
+    try:
+        article = Article.create(**data)
+    except Exception as err:
+        raise APIError(message=str(err))
+
+    return {"article": article_schema.dump(article)}
 
 
-@bp.route('/articles/<int:_id>')
-def get_article(_id):
-    article = Article.query.get(_id)
+@bp.route('/articles/<int:article_id>')
+@wrap_response()
+def get_article(article_id):
+    article = Article.query.get(article_id)
     if not article:
-        raise APIError(400, ["article not found"])
+        raise APIError(404, ["article not found"])
 
     article_schema = ArticleSchema()
-    return {
-        "apiVerison": "0.0",
-        "data": {
-            "article": article_schema.dump(article)
-        }
-    }
+    return {"article": article_schema.dump(article)}
 
 
-@bp.route('/articles/<_title>')
-def get_article_by_title(_title):
-    article = Article.query.filter(Article.title == _title).first()
+@bp.route('/articles/<title>')
+@wrap_response()
+def get_article_by_title(title):
+    article = Article.query.filter(Article.title == title).first()
     if not article:
-        raise APIError(400, "article not found")
+        raise APIError(404, "article not found")
 
     article_schema = ArticleSchema(exclude=['tags.category'])
-    return {
-        "apiVerison": "0.0",
-        "data": {
-            "articles": article_schema.dump(article)
-        }
-    }
+    return {"article": article_schema.dump(article)}
 
 
-@bp.route('/article/<int:_id>', methods=['PUT'])
-def put_article(_id):
-    article = Article.query.get(_id)
+@bp.route('/articles/<int:article_id>', methods=['PUT'])
+@wrap_response()
+def put_article(article_id):
+    article = Article.query.get(article_id)
     if not article:
-        raise APIError(400, "article not found")
+        raise APIError(404, "article not found")
 
     json_data = request.get_json()
     article_schema = ArticleSchema(exclude=['tags.category'])
@@ -81,42 +73,43 @@ def put_article(_id):
     try:
         data = article_schema.load(json_data)
     except ValidationError as verr:
-        raise APIError(422, "invalid input", input_error=verr.messages)
+        raise APIError(400, "invalid input", input_error=verr.messages)
 
     try:
         article.update(**data)
-    except Exception as e:
-        raise APIError()
+    except Exception as err:
+        raise APIError(message=str(err))
 
-    return {
-        "apiVersion": "0.0",
-        "data": {
-            "article": article_schema.dump(article)
-        }
-    }
+    return {"article": article_schema.dump(article)}
 
 
-@bp.route('/tags')
-def get_tags():
-    tags = Tag.query.all()
+@bp.route('/articles/<int:article_id>', methods=['DELETE'])
+def delete_article(article_id):
+    article = Article.query.get(article_id)
+    if not article:
+        return {}, 204
 
-    tags_schema = TagSchema(many=True)
-    return {
-        "apiVersion": "0.0",
-        "data": {
-            "tags": tags_schema.dump(tags)
-        }
-    }
+    try:
+        article.delete()
+    except Exception as err:
+        raise APIError(message=str(err))
+
+    return {}, 204
 
 
 @bp.route('/categories')
+@wrap_response()
 def get_categories():
     categories = Category.query.all()
 
     categories_schema = CategorySchema(many=True)
-    return {
-        "apiVersion": "0.0",
-        "data": {
-            "categogries": categories_schema.dump(categories)
-        }
-    }
+    return {"categories": categories_schema.dump(categories)}
+
+
+@bp.route('/tags')
+@wrap_response()
+def get_tags():
+    tags = Tag.query.all()
+
+    tags_schema = TagSchema(many=True)
+    return {"tags": tags_schema.dump(tags)}

@@ -7,7 +7,6 @@ verify_ssl = true
 pytest = "*"
 autopep8 = "*"
 alembic = "*"
-pytest-cov = "*"
 
 [packages]
 flask = "*"

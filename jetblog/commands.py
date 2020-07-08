@@ -32,12 +32,14 @@ def test(type):
         rv = pytest.main([UNITTEST_PATH, '-v', '-s'])
         exit(rv)
 
-    if type == 'e2e':
-        INTEGRATION_PATH = os.path.join(TEST_PATH, 'e2e')
+    if type == 'integration':
+        INTEGRATION_PATH = os.path.join(TEST_PATH, 'integration')
         rv = pytest.main([INTEGRATION_PATH, '-v', '-s'])
         exit(rv)
 
-    rv = pytest.main([TEST_PATH, '-v', '-s', '--cov'])
+    rv = pytest.main(
+        [TEST_PATH, '-v', '-s'])
+
     exit(rv)
 
 
@@ -73,8 +75,8 @@ def db_merge():
 @seed.command('articles')
 @with_appcontext
 @print_exception(IntegrityError)
-def seed_articles():
-    seeds.seed_articles()
+def seeds_articles():
+    seeds.seeds_articles()
     print("creating articles --- done")
 
 
