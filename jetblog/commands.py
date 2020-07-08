@@ -37,9 +37,7 @@ def test(type):
         rv = pytest.main([INTEGRATION_PATH, '-v', '-s'])
         exit(rv)
 
-    rv = pytest.main(
-        [TEST_PATH, '-v', '-s'])
-
+    rv = pytest.main([TEST_PATH, '-v', '-s'])
     exit(rv)
 
 
@@ -73,8 +71,8 @@ def db_merge():
 
 
 @seed.command('articles')
-@with_appcontext
 @print_exception(IntegrityError)
+@with_appcontext
 def seeds_articles():
     seeds.seeds_articles()
     print("creating articles --- done")

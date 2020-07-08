@@ -4,16 +4,18 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-pytest = "*"
 autopep8 = "*"
-alembic = "*"
+pytest = "*"
+pytest-cov = "*"
 
 [packages]
 flask = "*"
+psycopg2 = "*"
 sqlalchemy = "*"
 marshmallow = "*"
 marshmallow-sqlalchemy = "*"
-psycopg2 = "*"
+alembic = "*"
+gunicorn = "*"
 
 [requires]
 python_version = "3.7"
