@@ -1,13 +1,12 @@
 import datetime as dt
 
 from marshmallow import fields, post_dump
-from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 
-from jetblog.database import CamelCase
+from jetblog.database import SaAutoCamelSchema
 from .models import Category, Tag, Article
 
 
-class CategorySchema(CamelCase, SQLAlchemyAutoSchema):
+class CategorySchema(SaAutoCamelSchema):
     class Meta:
         model = Category
         exclude = ['created_at']
@@ -15,7 +14,7 @@ class CategorySchema(CamelCase, SQLAlchemyAutoSchema):
     tags = fields.Nested(lambda: TagSchema(exclude=['category']), many=True)
 
 
-class TagSchema(CamelCase, SQLAlchemyAutoSchema):
+class TagSchema(SaAutoCamelSchema):
     class Meta:
         model = Tag
         include_fk = True
@@ -24,7 +23,7 @@ class TagSchema(CamelCase, SQLAlchemyAutoSchema):
     category = fields.Nested(CategorySchema(exclude=['tags']))
 
 
-class ArticleSchema(CamelCase, SQLAlchemyAutoSchema):
+class ArticleSchema(SaAutoCamelSchema):
     class Meta:
         model = Article
         exclude = ['tags.category']

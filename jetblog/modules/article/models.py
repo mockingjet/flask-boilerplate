@@ -18,7 +18,7 @@ class Category(Model):
     name = Column(String(30), unique=True, index=True)
     created_at = Column(DateTime, default=dt.datetime.utcnow)
 
-    tags = relationship("Tag")
+    tags = relationship("Tag", back_populates="category")
 
     def __init__(self, name):
         Model.__init__(self, name=name)
@@ -32,7 +32,7 @@ class Tag(Model):
     category_id = Column(Integer, ForeignKey('categories.category_id'))
     created_at = Column(DateTime, default=dt.datetime.utcnow)
 
-    category = relationship("Category")
+    category = relationship("Category", back_populates="tags")
     articles = relationship("Article", secondary=articles_assoc_tags,
                             back_populates="tags")
 
@@ -55,3 +55,10 @@ class Article(Model):
     def __init__(self, title, description, body, **kwargs):
         Model.__init__(self, title=title,
                        description=description, body=body, **kwargs)
+
+    def add_tag(self, tag: Tag):
+        self.tags.append(tag)
+
+    def remove_tag(self, tag: Tag):
+        if tag in self.tags:
+            self.tags.remove(tag)

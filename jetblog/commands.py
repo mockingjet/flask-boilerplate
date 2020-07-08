@@ -22,10 +22,22 @@ TEST_PATH = os.path.join(PROJECT_ROOT, 'tests')
 
 
 @click.command()
-def test():
+@click.argument('type', nargs=1, default="")
+def test(type):
     """ run pytest """
     import pytest
-    rv = pytest.main([TEST_PATH, '-v', '-s'])
+
+    if type == 'unit':
+        UNITTEST_PATH = os.path.join(TEST_PATH, 'unit')
+        rv = pytest.main([UNITTEST_PATH, '-v', '-s'])
+        exit(rv)
+
+    if type == 'e2e':
+        INTEGRATION_PATH = os.path.join(TEST_PATH, 'e2e')
+        rv = pytest.main([INTEGRATION_PATH, '-v', '-s'])
+        exit(rv)
+
+    rv = pytest.main([TEST_PATH, '-v', '-s', '--cov'])
     exit(rv)
 
 
@@ -62,7 +74,7 @@ def db_merge():
 @with_appcontext
 @print_exception(IntegrityError)
 def seed_articles():
-    seeds.create_articles()
+    seeds.seed_articles()
     print("creating articles --- done")
 
 

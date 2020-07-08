@@ -8,7 +8,7 @@ from jetblog.settings import TestConfig
 from jetblog.database import engine, db_session, Base
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture()
 def app():
     app = create_app(TestConfig)
     ctx = app.test_request_context()

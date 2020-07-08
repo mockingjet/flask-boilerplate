@@ -1,7 +1,7 @@
 from jetblog.modules.article.models import Article, Category, Tag
 
 
-def create_articles():
+def seed_articles():
     c1 = Category('f2e').save()
     c2 = Category('devops') .save()
 

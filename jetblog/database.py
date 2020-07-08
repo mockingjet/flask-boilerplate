@@ -4,6 +4,7 @@ import abc
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.ext.declarative import declarative_base
+from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 
 from .settings import Config
 
@@ -51,7 +52,7 @@ def camelcase(s):
     return next(parts) + "".join(i.title() for i in parts)
 
 
-class CamelCase():
+class SaAutoCamelSchema(SQLAlchemyAutoSchema):
     """For marshmallow schemas that uses camel-case for its external representation
     and snake-case for its internal representation.
     """
